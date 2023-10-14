@@ -62,6 +62,7 @@ public class GearHoundsHardware extends Hardware {
         //leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(BNO055IMU.class, "imu");

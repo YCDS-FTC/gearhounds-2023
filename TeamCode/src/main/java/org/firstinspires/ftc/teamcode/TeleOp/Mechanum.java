@@ -12,7 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Utilities.GearHoundsHardware;
 
-
+// cd /Users/linva/AppData/Local/Android/Sdk/platform-tools
+// ./adb connect 192.168.43.1:5555
 
 @TeleOp(name="Mechanum", group="TeleOp")
 
@@ -97,9 +98,9 @@ public class Mechanum extends OpMode
 
         // Driver centric mechanum
         Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
-        double angle = angles.firstAngle;
-        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) + Math.PI / 4;
+        double angle = -angles.firstAngle;
+        double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
+        double robotAngle = Math.atan2(-gamepad1.left_stick_y, -gamepad1.left_stick_x) + Math.PI / 4;
         robotAngle = robotAngle - Math.toRadians(angle);
         double rightX = gamepad1.right_stick_x;
         final double lf = -r * Math.cos(robotAngle) + rightX;
