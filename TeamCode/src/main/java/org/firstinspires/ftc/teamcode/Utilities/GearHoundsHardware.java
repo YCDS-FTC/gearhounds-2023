@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Utilities;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -20,6 +21,7 @@ public class GearHoundsHardware extends Hardware {
     public DcMotor  rightFront;
     public DcMotor  leftBack;
     public DcMotor  rightBack;
+    //public RevRoboticsCoreHexMotor intake;
     public BNO055IMU imu;
     public Orientation angles;
     public Acceleration gravity;
@@ -44,6 +46,7 @@ public class GearHoundsHardware extends Hardware {
         robotMap = hwMap;
 
         // Define and Initialize Motors for drivetrain
+        //intake = robotMap.get(RevRoboticsCoreHexMotor.class, "intake");
         leftFront  = robotMap.get(DcMotor.class, "leftFront");
         rightFront = robotMap.get(DcMotor.class, "rightFront");
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -107,11 +107,13 @@ public class Mechanum extends OpMode
         final double lb = r * Math.sin(robotAngle) + rightX;
         final double rf = -r * Math.cos(robotAngle) - rightX;
         final double rb = r * Math.sin(robotAngle) - rightX;
+        //final double i = r * Math.sin(robotAngle) + rightX;
 
         robot.leftFront.setPower(lf * shift);
         robot.leftBack.setPower(lb * shift);
         robot.rightFront.setPower(rf * shift);
         robot.rightBack.setPower(rb * shift);
+        //robot.intake.equals( * shift);
 
 
     }
@@ -127,6 +129,7 @@ public class Mechanum extends OpMode
         robot.rightFront.setPower(0);
         robot.leftBack.setPower(0);
         robot.rightBack.setPower(0);
+        //robot.intake.equals(0);
     }
 
     // fuction used to make sure that the value inputted to the
