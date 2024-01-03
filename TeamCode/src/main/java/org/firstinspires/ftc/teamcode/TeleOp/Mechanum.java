@@ -96,17 +96,21 @@ public class Mechanum extends OpMode
         } else robot.claw.setPower(0);
 
 
-        if (gamepad2.left_stick_y != 0) {
+        if (-gamepad2.left_stick_y > 0) {
             robot.lift.setPower(-gamepad2.left_stick_y);
-        } else if (gamepad2.left_stick_y != 0) {
-            robot.lift.setPower(gamepad2.left_stick_y);
+        } else if (-gamepad2.left_stick_y < 0 && robot.lift.getCurrentPosition() > 40) {
+            robot.lift.setPower(-gamepad2.left_stick_y);
         } else robot.lift.setPower(0);
+
 
         if (gamepad2.right_bumper)
             robot.sticks.setPosition(.5);
 
         if (gamepad2.left_bumper)
             robot.sticks.setPosition(.45);
+
+
+
 
 
 
@@ -129,6 +133,8 @@ public class Mechanum extends OpMode
         telemetry.addData("", "Left Back %d   Right Back %d", robot.leftBack.getCurrentPosition(), robot.rightBack.getCurrentPosition());
 
         telemetry.addData("", "Angle  %f", robot.getAngle());
+
+        telemetry.addData("", "Angle  %f", -gamepad2.left_stick_y);
 
         telemetry.addData("", "lift %d", robot.lift.getCurrentPosition());
 
