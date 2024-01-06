@@ -32,6 +32,8 @@ public class Mechanum extends OpMode
 
 	private double shift = 1.0;
 
+        boolean Moving = false;
+
     @Override
     public void init() {
 
@@ -89,30 +91,64 @@ public class Mechanum extends OpMode
             shift = 1;
         }
 
-        if (gamepad2.left_trigger != 0) {
-            robot.claw.setPower(gamepad2.left_trigger*.5);
-        } else if (gamepad2.right_trigger != 0) {
-            robot.claw.setPower(-gamepad2.right_trigger*.5);
-        } else robot.claw.setPower(0);
+//        if (gamepad2.left_trigger != 0) {
+//            robot.claw.setPower(gamepad2.left_trigger*.5);
+//        } else if (gamepad2.right_trigger != 0) {
+//            robot.claw.setPower(-gamepad2.right_trigger*.5);
+//        } else robot.claw.setPower(0);
 
+        if (gamepad2.left_bumper) {
+           robot.claw.setPosition(.6);
+        } else if (gamepad2.right_bumper) {
+            robot.claw.setPosition(0.35);
+        }
+
+//
+//        if (-gamepad2.left_stick_y > 0) {
+//            robot.lift.setPower(-gamepad2.left_stick_y);
+//        } else if (-gamepad2.left_stick_y < 0 && robot.lift.getCurrentPosition() > 40) {
+//            robot.lift.setPower(-gamepad2.left_stick_y);
+//        } else robot.lift.setPower(0);
+
+
+//        if (gamepad2.right_bumper)
+//            robot.claw.setPosition(.5);
+//
+//        if (gamepad2.left_bumper)
+//            robot.sticks.setPosition(.45);
+
+
+        if (gamepad2.left_trigger > 0.5) {
+            robot.chain.setPower(-0.3);
+        } else if (gamepad2.right_trigger > 0.5) {
+            robot.chain.setPower(0.3);
+        } else {
+            robot.chain.setPower(0);
+        }
 
         if (-gamepad2.left_stick_y > 0) {
+            Moving = false;
+            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.lift.setPower(-gamepad2.left_stick_y);
         } else if (-gamepad2.left_stick_y < 0 && robot.lift.getCurrentPosition() > 40) {
+            Moving = false;
+            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.lift.setPower(-gamepad2.left_stick_y);
-        } else robot.lift.setPower(0);
+        } else {
+            if (Moving == false) {
+                robot.lift.setPower(0);
+            }
+        }
 
-
-        if (gamepad2.right_bumper)
-            robot.sticks.setPosition(.5);
-
-        if (gamepad2.left_bumper)
-            robot.sticks.setPosition(.45);
-
-
-
-
-
+        if (gamepad2.left_stick_button) {
+            Moving = true;
+            gamepad2.rumble(100);
+        }
+        if (Moving == true) {
+            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.lift.setTargetPosition(20);
+            robot.lift.setPower(1);
+        }
 
 //        if (gamepad1.x)
 //            robot.claw.setTargetPosition();
@@ -138,7 +174,7 @@ public class Mechanum extends OpMode
 
         telemetry.addData("", "lift %d", robot.lift.getCurrentPosition());
 
-        telemetry.addData("", "claw %d", robot.claw.getCurrentPosition());
+        //telemetry.addData("", "claw %d", robot.claw.getCurrentPosition());
 
         telemetry.update();
 
@@ -183,17 +219,17 @@ public class Mechanum extends OpMode
         robot.leftBack.setPower(0);
         robot.rightBack.setPower(0);
         robot.lift.setPower(0);
-        robot.claw.setPower(0);
-        robot.sticks.setPosition(0);
+        //robot.claw.setPower(0);
+        robot.claw.setPosition(0);
     }
 
-    // fuction used to make sure that the value inputted to the
-    // motors stays between 1 and -1
-    private double clamp(double x, double min, double max) {
-
-        return Math.max(min,Math.min(max,x));
-
-    }
+//    // fuction used to make sure that the value inputted to the
+//    // motors stays between 1 and -1
+//    private double clamp(double x, double min, double max) {
+//
+//        return Math.max(min,Math.min(max,x));
+//
+//    }
 
 
 }
