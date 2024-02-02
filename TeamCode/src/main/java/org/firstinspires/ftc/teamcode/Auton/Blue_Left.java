@@ -31,12 +31,18 @@ package org.firstinspires.ftc.teamcode.Auton;
 
 import android.transition.Slide;
 
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AutonCommands.MoveForDistance;
+import org.firstinspires.ftc.teamcode.AutonCommands.SetClaws;
+import org.firstinspires.ftc.teamcode.AutonCommands.SetWrist;
+import org.firstinspires.ftc.teamcode.AutonCommands.StrafeForDistance;
+import org.firstinspires.ftc.teamcode.AutonCommands.TurnByAngle;
+import org.firstinspires.ftc.teamcode.AutonCommands.WaitForTime;
 import org.firstinspires.ftc.teamcode.Utilities.Command;
 import org.firstinspires.ftc.teamcode.AutonCommands.SlideToPosition;
 import org.firstinspires.ftc.teamcode.Utilities.GearHoundsHardware;
@@ -77,6 +83,7 @@ public class Blue_Left extends LinearOpMode {
     //Create elapsed time variable and an instance of elapsed time
     private ElapsedTime runtime = new ElapsedTime();
     private boolean done = false;
+    private double propPos = 0;
 
     @Override
     public void runOpMode() {
@@ -85,15 +92,85 @@ public class Blue_Left extends LinearOpMode {
         robot.imu.resetYaw();
         List<Command> steps = new ArrayList<>();
 
-        int step = 0;
 
+
+        int step = 0;
+        robot.huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
         // Waiting for start
         while(!isStarted()) {
             telemetry.update();
+
+
+            HuskyLens.Block[] blocks = robot.huskyLens.blocks();
+            telemetry.addData("Block count", blocks.length);
+            for (int i = 0; i < blocks.length; i++) {
+                telemetry.addData("Block", blocks[i].toString());
+            }
+
+
+            telemetry.addLine("On the right");
+            for (int i = 0; i < blocks.length; i++) {
+                if (blocks[i].id == 2 && blocks[i].y > 100) {
+                    if (blocks[i].x > 160 ) {
+                        propPos = 2;
+                        telemetry.addLine("On the Middle");
+                    } else {
+                        propPos = 1;
+                        telemetry.addLine("On the Left");
+                    }
+                }
+            }
+
+            telemetry.update();
+            robot.claw.setPosition(0.7);
+
+            robot.claw.setPosition(0.5);
+
+            steps.add(new MoveForDistance(robot, 2, 0, 0, runtime, 5, 0.5, 1));
+
+            steps.add(new StrafeForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+
+            steps.add(new MoveForDistance(robot, 20, 5, 5, runtime, 5, 0.5, 1));
+
+            if (propPos == 1) {
+                steps.add(new TurnByAngle(robot, runtime, -45, 0.5, 5));
+                steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+                steps.add(new WaitForTime(robot, runtime, 1));
+                robot.claw.setPosition(9);
+                steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+            } else if (propPos == 2) {
+                steps.add(new MoveForDistance(robot, 7, 1, 1, runtime, 5, 0.5, 1));
+                steps.add(new MoveForDistance(robot, 4, 1, 1, runtime, 5, -0.5, 1));
+                steps.add(new WaitForTime(robot, runtime, 1));
+                robot.claw.setPosition(9);
+                steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+            } else if (propPos == 3) {
+                steps.add(new TurnByAngle(robot, runtime, 45, 0.5, 5));
+                steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, 0.5, 1));
+                steps.add(new WaitForTime(robot, runtime, 1));
+                robot.claw.setPosition(9);
+                steps.add(new MoveForDistance(robot, 5, 1, 1, runtime, 5, -0.5, 1));
+            }
+
+            steps.add(new MoveForDistance(robot, 300, 100, 100, runtime, 5, 0.5, 1));
+            steps.add(new SlideToPosition(robot, runtime, 500, 0.35, 5));
+
         }
         startTime = runtime.seconds();
-        steps.add(new MoveForDistance(robot, 1000, 100, 100, runtime, 5, 0.5, 1));
-        steps.add(new SlideToPosition(robot, runtime, 500, 0.35, 5));
+        HuskyLens.Block[] blocks = robot.huskyLens.blocks();
+        propPos = 3;
+        telemetry.addLine("On the right");
+        for (int i = 0; i < blocks.length; i++) {
+            if (blocks[i].id == 2 && blocks[i].y > 100) {
+                if (blocks[i].x > 160 ) {
+                    propPos = 2;
+                    telemetry.addLine("On the Middle");
+                } else {
+                    propPos = 1;
+                    telemetry.addLine("On the Left");
+                }
+            }
+        }
 
         // This is where we build the autonomous routine
         Command currentStep = steps.get(step);

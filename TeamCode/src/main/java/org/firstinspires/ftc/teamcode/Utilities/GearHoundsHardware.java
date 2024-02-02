@@ -27,11 +27,14 @@ public class GearHoundsHardware extends Hardware {
     public DcMotorEx  rightFront;
     public DcMotorEx  leftBack;
     public DcMotorEx  rightBack;
+    public HuskyLens huskyLens;
+    public DcMotorEx hanger;
 
     public DcMotorEx intake;
     public DcMotorEx lift;
     public Servo claw;
     public DcMotor chain;
+    //public DcMotorEx spinner;
 
     public static final int READ_PERIOD = 1;
     //public HuskyLens huskyLens;
@@ -63,6 +66,9 @@ public class GearHoundsHardware extends Hardware {
         robotMap = hwMap;
 
         // Define and Initialize Motors for drivetrain
+        //huskyLens = robotMap.get(HuskyLens.class, "huskyLens");
+
+        hanger = robotMap.get(DcMotorEx.class, "hanger");
         claw = robotMap.get(Servo.class, "sticks");
         lift = robotMap.get(DcMotorEx.class, "lift");
         intake = robotMap.get(DcMotorEx.class, "intake");
@@ -72,7 +78,10 @@ public class GearHoundsHardware extends Hardware {
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //spinner = robotMap.get(DcMotorEx.class, "spinner");
         chain = robotMap.get(DcMotor.class, "chain");
+        //spinner.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //spinner.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack  = robotMap.get(DcMotorEx.class, "leftBack");
@@ -85,10 +94,12 @@ public class GearHoundsHardware extends Hardware {
         chain.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hanger.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hanger.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
-       // huskyLens = robotMap.get(HuskyLens.class, "huskylens");
+       huskyLens = robotMap.get(HuskyLens.class, "huskyLens");
 
         // Defines the REV Hub's internal IMU (Gyro)
         imu = robotMap.get(IMU.class, "imu");
