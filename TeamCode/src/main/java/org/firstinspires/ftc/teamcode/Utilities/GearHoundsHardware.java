@@ -29,7 +29,10 @@ public class GearHoundsHardware extends Hardware {
     public DcMotorEx  rightBack;
     public HuskyLens huskyLens;
     public DcMotorEx hanger;
+    public Servo launcher;
 
+    public Servo Servo1;
+    public Servo Servo2;
     public DcMotorEx intake;
     public DcMotorEx lift;
     public Servo claw;
@@ -68,6 +71,9 @@ public class GearHoundsHardware extends Hardware {
         // Define and Initialize Motors for drivetrain
         //huskyLens = robotMap.get(HuskyLens.class, "huskyLens");
 
+        launcher = robotMap.get(Servo.class, "launcher");
+        Servo1 = robotMap.get(Servo.class, "Servo1");
+        Servo2 = robotMap.get(Servo.class, "Servo2");
         hanger = robotMap.get(DcMotorEx.class, "hanger");
         claw = robotMap.get(Servo.class, "sticks");
         lift = robotMap.get(DcMotorEx.class, "lift");
@@ -96,8 +102,6 @@ public class GearHoundsHardware extends Hardware {
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hanger.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hanger.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
        huskyLens = robotMap.get(HuskyLens.class, "huskyLens");
 
@@ -107,8 +111,8 @@ public class GearHoundsHardware extends Hardware {
         // Defines the parameters for the gyro (units)
         IMU.Parameters imuParameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                       RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                       RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
                 )
         );
         imu.initialize(imuParameters);

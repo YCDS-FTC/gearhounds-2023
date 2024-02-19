@@ -17,14 +17,16 @@ public class SetClaws extends Command {
     private double runTime;
     private GearHoundsHardware robot;
     private double servoPosition;
+    private double servoPosition1;
     private boolean useInit;
     private boolean useEnd;
 
-    public SetClaws(Hardware robot, ElapsedTime timer, double runTime, double servoPosition) {
+    public SetClaws(Hardware robot, ElapsedTime timer, double runTime, double servoPosition, double servoPosition1) {
         super(robot);
         this.timer = timer;
         this.runTime = runTime*1000;
         this.servoPosition = servoPosition;
+        this.servoPosition1 = servoPosition1;
         this.robot = (GearHoundsHardware) getRobot();
         this.useInit = true;
         this.useEnd = true;
@@ -51,7 +53,9 @@ public class SetClaws extends Command {
         if (getState() == RUNNING) {
             double elapsedTime = timer.milliseconds()-startTime;
             if (elapsedTime < runTime) {
-                robot.claw.setPosition(servoPosition);
+                //robot.claw.setPosition(servoPosition);
+                robot.Servo1.setPosition(servoPosition);
+                robot.Servo2.setPosition(servoPosition1);
             } else {
                 setState(ENDING);
             }

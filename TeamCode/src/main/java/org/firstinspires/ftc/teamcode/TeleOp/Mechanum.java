@@ -99,9 +99,11 @@ public class Mechanum extends OpMode
 //        } else robot.claw.setPower(0);
 
         if (gamepad2.left_bumper) {
-            robot.claw.setPosition(.51);
+            robot.Servo1.setPosition(.4);
+            robot.Servo2.setPosition(.6);
         } else if (gamepad2.right_bumper) {
-            robot.claw.setPosition(0.36);
+            robot.Servo1.setPosition(0.6);
+            robot.Servo2.setPosition(0.4);
         }
 
 //        if (-gamepad2.right_stick_y > 0) {
@@ -167,14 +169,14 @@ public class Mechanum extends OpMode
 //            robot.chain.setPower(0);
 //        }
 
-        if (-gamepad2.left_stick_y > 0) {
+        if (gamepad2.left_stick_y < 0) {
             Moving = false;
             robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.lift.setPower(-gamepad2.left_stick_y);
-        } else if (-gamepad2.left_stick_y < 0 && robot.lift.getCurrentPosition() > 40) {
+            robot.lift.setPower(gamepad2.left_stick_y);
+        } else if (gamepad2.left_stick_y > 0 && robot.lift.getCurrentPosition() < 40) {
             Moving = false;
             robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.lift.setPower(-gamepad2.left_stick_y*0.85);
+            robot.lift.setPower(gamepad2.left_stick_y*0.85);
         } else {
             if (Moving == false) {
                 robot.lift.setPower(0);
@@ -186,6 +188,12 @@ public class Mechanum extends OpMode
             gamepad2.rumble(100);
         }
 
+        if (gamepad2.dpad_up) {
+            robot.launcher.setPosition(1);
+        }
+
+        if (gamepad2.dpad_down)
+            robot.launcher.setPosition(-1);
 //        if () {
 //            robot.chain.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.chain.setTargetPosition(29);
@@ -214,6 +222,8 @@ public class Mechanum extends OpMode
 
         telemetry.addData("", "lift %d", robot.lift.getCurrentPosition());
 
+
+
         //telemetry.addData("", "claw %d", robot.claw.getCurrentPosition());
 
         telemetry.update();
@@ -227,8 +237,29 @@ public class Mechanum extends OpMode
             robot.imu.resetYaw();
         }
 
+
+//        public void drive_update() {
+//            /**gets the angle from the imu**/
+//            Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+//            double angle = angles.firstAngle;
+//            /**gets squared values from the driver's stick input**/
+//            double r = Math.hypot(-gamepad1.left_stick_y, -gamepad1.left_stick_x);
+//            /**finds the desired angle that the driver wants to move the robot**/
+//            double robotAngle = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+//            /**sets the movement angle by finding the difference of the robots angle, the input angle and the offset value
+//             * the offset value is set by the the driver if the imu does not reset after auto*/
+//            robotAngle = robotAngle - Math.toRadians(angle) + offset;
+//            /** sets the turning value */
+//            double rightX = gamepad1.right_stick_x;
+//            /** calculates the motor powers using trig functions and previously found values */
+//            final double v1 = r * Math.cos(robotAngle) + rightX;
+//            final double v2 = r * Math.sin(robotAngle) - rightX;
+//            final double v3 = r * Math.sin(robotAngle) + rightX;
+//            final double v4 = r * Math.cos(robotAngle) - rightX;
+
+
         double rotX = x * Math.cos(-facing) - y * Math.sin(-facing);
-        rotX = rotX * 1.1;
+       rotX = rotX * 1.1;
         double rotY = x * Math.sin(-facing) + y * Math.cos(-facing);
 
         double d = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
